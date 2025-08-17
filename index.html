@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Kill Streak is your all-in-one platform for Free Fire tournaments, lotteries, real-money gaming, and instant UPI withdrawals."
+    />
+    <title>Kill Streak - Ultimate Esports & Lottery Platform</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+
+      :root {
+        --primary-1: #6366f1;
+        --primary-2: #8b5cf6;
+        --primary-3: #ec4899;
+        --accent-1: #06b6d4;
+        --accent-2: #10b981;
+
+        --bg-1: #f8fafc;
+        --bg-2: #ffffff;
+        --text-1: #0f172a;
+        --text-2: #334155;
+        --muted: #64748b;
+
+        --glass: rgba(255, 255, 255, 0.75);
+        --glass-border: rgba(15, 23, 42, 0.06);
+        --border: rgba(15, 23, 42, 0.08);
+        --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-1);
+        color: var(--text-1);
+        line-height: 1.6;
+        overflow-x: hidden; /* fallback */
+        overflow-x: clip; /* avoid horizontal scroll from transforms (supported browsers) */
+      }
+
+      img,
+      svg,
+      video {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* Animated Mesh Background (light) */
+      .mesh-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background: radial-gradient(
+            ellipse at top left,
+            rgba(99, 102, 241, 0.12) 0%,
+            transparent 45%
+          ),
+          radial-gradient(
+            ellipse at top right,
+            rgba(139, 92, 246, 0.12) 0%,
+            transparent 45%
+          ),
+          radial-gradient(
+            ellipse at bottom left,
+            rgba(236, 72, 153, 0.1) 0%,
+            transparent 45%
+          ),
+          radial-gradient(
+            ellipse at bottom right,
+            rgba(6, 182, 212, 0.1) 0%,
+            transparent 45%
+          ),
+          linear-gradient(135deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%);
+      }
+
+      .floating-shapes {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(45deg, var(--primary-1), var(--primary-2));
+        opacity: 0.1;
+        animation: float 20s infinite linear;
+      }
+
+      .shape:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 20%;
+        left: 10%;
+        animation-duration: 25s;
+      }
+      .shape:nth-child(2) {
+        width: 120px;
+        height: 120px;
+        top: 60%;
+        left: 80%;
+        animation-duration: 30s;
+      }
+      .shape:nth-child(3) {
+        width: 60px;
+        height: 60px;
+        top: 80%;
+        left: 20%;
+        animation-duration: 35s;
+      }
+      .shape:nth-child(4) {
+        width: 100px;
+        height: 100px;
+        top: 30%;
+        left: 70%;
+        animation-duration: 40s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0);
+        }
+        25% {
+          transform: translateY(-20px) rotate(90deg);
+        }
+        50% {
+          transform: translateY(-40px) rotate(180deg);
+        }
+        75% {
+          transform: translateY(-20px) rotate(270deg);
+        }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header */
+      .header {
+        position: fixed;
+        inset-inline: 0;
+        top: 0;
+        z-index: 100;
+        background: transparent;
+        border-bottom: 1px solid transparent;
+        transition: background 0.25s ease, border-color 0.25s ease,
+          box-shadow 0.25s ease, backdrop-filter 0.25s ease;
+        padding: calc(env(safe-area-inset-top) + 12px) 30px 12px;
+      }
+
+      /* Blurred state on scroll */
+      .header.is-scrolled {
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: saturate(160%) blur(14px);
+        -webkit-backdrop-filter: saturate(160%) blur(14px);
+        border-bottom-color: rgba(15, 23, 42, 0.08);
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand-text {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          var(--primary-1),
+          var(--primary-2),
+          var(--primary-3)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        white-space: nowrap;
+      }
+
+      img.logo {
+        height: 72px; /* bigger logo */
+        width: auto;
+        display: block;
+      }
+
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        min-height: 100dvh; /* dynamic viewport on mobile */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        padding-top: calc(
+          100px + env(safe-area-inset-top)
+        ); /* fallback, JS will adjust */
+      }
+
+      .hero-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(90vw, 800px);
+        height: min(90vw, 800px);
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.08) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 0 auto;
+        padding-inline: 0.5rem;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-2);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(10px);
+        padding: 8px 14px;
+        border-radius: 100px;
+        font-size: 0.9rem;
+        margin-bottom: 12px; /* tighter */
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      h1,
+      h2,
+      .section-title,
+      .cta-title {
+        text-wrap: balance;
+      }
+
+      .hero h1 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2.4rem, 7vw, 5rem);
+        font-weight: 800;
+        margin: 8px 0 12px; /* kill default top margin + tighten */
+        background: linear-gradient(
+          135deg,
+          #111827 0%,
+          var(--primary-1) 35%,
+          var(--primary-2) 65%,
+          var(--accent-1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.03; /* reduce gap between wrapped lines */
+        letter-spacing: -0.02em;
+      }
+
+      .hero-subtitle {
+        font-size: clamp(1.1rem, 3.2vw, 1.8rem);
+        font-weight: 600;
+        margin-bottom: 10px; /* tighter */
+        background: linear-gradient(135deg, var(--primary-2), var(--primary-3));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-description {
+        font-size: clamp(1rem, 2.2vw, 1.25rem);
+        margin-bottom: 20px;
+        color: var(--text-2);
+        line-height: 1.6;
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 14px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
+        color: white;
+        padding: 16px 26px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 1.05rem;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .download-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        left: -100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.35),
+          transparent
+        );
+        transition: left 0.7s;
+      }
+
+      .download-btn:hover::before {
+        left: 100%;
+      }
+
+      .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.35);
+      }
+
+      .secondary-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        color: var(--text-1);
+        padding: 16px 26px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 1.05rem;
+        font-weight: 600;
+        transition: transform 0.2s, background 0.2s;
+      }
+
+      .secondary-btn:hover {
+        background: #f1f5f9;
+        transform: translateY(-2px);
+      }
+
+      /* Social under CTA */
+      .social-links {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .social-link {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-1);
+        text-decoration: none;
+        transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+        font-size: 1.1rem;
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .social-link::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          transparent,
+          rgba(0, 0, 0, 0.05),
+          transparent
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+      }
+
+      .social-link:hover::before {
+        transform: translateX(100%);
+      }
+
+      .social-link:hover {
+        transform: translateY(-2px);
+        color: #fff;
+        background: var(--primary-1);
+        border-color: var(--primary-1);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+      }
+
+      .telegram:hover {
+        background: #0088cc;
+        border-color: #0088cc;
+        box-shadow: 0 8px 25px rgba(0, 136, 204, 0.25);
+      }
+      .whatsapp:hover {
+        background: #25d366;
+        border-color: #25d366;
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.25);
+      }
+      .instagram:hover {
+        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743);
+        border-color: #f09433;
+        box-shadow: 0 8px 25px rgba(240, 148, 51, 0.25);
+      }
+      .youtube:hover {
+        background: #ff0000;
+        border-color: #ff0000;
+        box-shadow: 0 8px 25px rgba(255, 0, 0, 0.25);
+      }
+
+      /* Main Content */
+      .main-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .section {
+        margin: 100px 0;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+        padding-inline: 0.5rem;
+      }
+
+      .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-2);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(10px);
+        padding: 6px 14px;
+        border-radius: 100px;
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+        color: var(--text-2);
+      }
+
+      .section-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2rem, 4.8vw, 3.2rem);
+        font-weight: 700;
+        margin-bottom: 16px;
+        background: linear-gradient(
+          135deg,
+          #111827,
+          var(--primary-1),
+          var(--primary-2)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+      }
+
+      .section-description {
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        color: var(--text-2);
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Features Grid */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+      }
+
+      .feature-card {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        padding: 24px;
+        border-radius: 18px;
+        transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.08),
+          rgba(139, 92, 246, 0.08)
+        );
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+
+      .feature-card:hover::before {
+        opacity: 1;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(99, 102, 241, 0.22);
+        box-shadow: 0 18px 36px rgba(2, 6, 23, 0.12);
+      }
+
+      .feature-icon {
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25);
+        color: #fff;
+      }
+
+      .feature-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-1);
+      }
+
+      .feature-description {
+        color: var(--text-2);
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
+      /* How It Works */
+      .how-it-works {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        padding: 70px 0;
+        border-radius: 28px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin: 80px 0;
+      }
+
+      .how-it-works::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.05),
+          rgba(139, 92, 246, 0.05)
+        );
+      }
+
+      .steps-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        margin-top: 40px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .step {
+        text-align: center;
+        padding: 24px 16px;
+        position: relative;
+      }
+
+      .step-number {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
+        color: white;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0 auto 16px;
+        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25);
+      }
+
+      .step-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-1);
+      }
+
+      .step-description {
+        color: var(--text-2);
+        line-height: 1.6;
+        font-size: 0.98rem;
+      }
+
+      /* Why Choose */
+      .why-choose {
+        background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
+        padding: 70px 0;
+        border-radius: 28px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+        margin: 80px 0;
+      }
+
+      .why-choose::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+      }
+
+      .why-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .why-item {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(20px);
+        padding: 24px 16px;
+        border-radius: 18px;
+        transition: transform 0.2s, background 0.2s;
+        color: #fff;
+      }
+
+      .why-item:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .why-icon {
+        font-size: 2rem;
+        margin-bottom: 12px;
+      }
+
+      .why-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .why-choose .section-title {
+        background: none;
+        -webkit-text-fill-color: currentColor;
+        color: #fff;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        text-align: center;
+        padding: 80px 0;
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin: 80px 0 100px;
+      }
+
+      .cta-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at center,
+          rgba(99, 102, 241, 0.08) 0%,
+          transparent 70%
+        );
+      }
+
+      .cta-content {
+        position: relative;
+        z-index: 1;
+        padding-inline: 0.5rem;
+      }
+
+      .cta-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2rem, 4.6vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .cta-subtitle {
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        margin-bottom: 28px;
+        color: var(--text-2);
+      }
+
+      .cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        color: white;
+        padding: 18px 32px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 1.05rem;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 8px 32px rgba(6, 182, 212, 0.25);
+      }
+
+      .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(6, 182, 212, 0.35);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 900px) {
+        .brand-text {
+          font-size: 1.4rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 16px;
+        }
+
+        .header {
+          padding: calc(env(safe-area-inset-top) + 10px) 16px 10px;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        img.logo {
+          height: 48px; /* bigger on mobile too */
+        }
+
+        .brand-text {
+          font-size: 1.25rem;
+        }
+
+        .hero {
+          padding-top: calc(96px + env(safe-area-inset-top));
+          min-height: auto; /* let content define height on small screens */
+        }
+
+        .hero-description {
+          margin-bottom: 16px;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .download-btn,
+        .secondary-btn {
+          width: 100%;
+          max-width: 300px;
+          justify-content: center;
+          padding: 14px 20px;
+          font-size: 1rem;
+        }
+
+        .social-link {
+          width: 40px;
+          height: 40px;
+          font-size: 1rem;
+        }
+
+        .section {
+          margin: 70px 0;
+        }
+
+        .how-it-works,
+        .why-choose,
+        .cta-section {
+          margin: 60px 0;
+          border-radius: 24px;
+          padding: 50px 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .nav {
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .hero-badge {
+          font-size: 0.82rem;
+          padding: 6px 12px;
+        }
+
+        .features-grid,
+        .steps-container,
+        .why-grid {
+          gap: 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-subtitle {
+          margin-bottom: 10px;
+        }
+
+        .download-btn,
+        .secondary-btn,
+        .cta-btn {
+          padding: 14px 20px;
+          font-size: 0.95rem;
+          border-radius: 10px;
+        }
+
+        .feature-icon {
+          width: 48px;
+          height: 48px;
+          font-size: 1.1rem;
+          border-radius: 12px;
+        }
+
+        .step-number {
+          width: 56px;
+          height: 56px;
+          font-size: 1.1rem;
+          border-radius: 14px;
+        }
+      }
+
+      /* Landscape small height */
+      @media (max-height: 500px) and (orientation: landscape) {
+        .hero {
+          padding-top: calc(80px + env(safe-area-inset-top));
+          padding-bottom: 24px;
+          min-height: auto;
+        }
+        .hero-buttons {
+          flex-direction: row;
+          gap: 10px;
+        }
+        .download-btn,
+        .secondary-btn {
+          min-width: 140px;
+          width: auto;
+        }
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-in {
+        animation: fadeInUp 0.6s ease forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Mesh Background -->
+    <div class="mesh-bg"></div>
+
+    <!-- Floating Shapes -->
+    <div class="floating-shapes" aria-hidden="true">
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+      <nav class="nav container">
+        <div class="logo-container">
+          <a href="#">
+            <img src="kst-logo2.jpg" alt="Kill Streak Logo" class="logo" />
+          </a>
+          <div class="brand-text">Kill Streak Tournaments</div>
+        </div>
+        <!-- Social links moved under the Download button in the hero -->
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            Ultimate Gaming Platform
+          </div>
+          <h1>Kill Streak Tournaments</h1>
+          <p class="hero-subtitle">Your Ultimate Esports & Lottery Platform!</p>
+          <p class="hero-description">
+            Kill Streak is your all-in-one destination for Free Fire
+            tournaments, lotteries, and real-money gaming. Whether you're a
+            casual player or a competitive pro, you can join matches, win
+            prizes, and withdraw your winnings—<strong
+              >all from your phone!</strong
+            >
+          </p>
+          <div class="hero-buttons">
+            <a href="KillStreak.apk" class="download-btn" download>
+              <i class="fa-solid fa-download" aria-hidden="true"></i>
+              Download Now
+            </a>
+          </div>
+
+          <!-- Social links below the download button -->
+          <div class="social-links" aria-label="Social links">
+            <a
+              href="https://t.me/killstreak"
+              class="social-link telegram"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Join us on Telegram"
+            >
+              <i class="fa-brands fa-telegram" aria-hidden="true"></i>
+            </a>
+            <a
+              href="https://wa.me/1234567890"
+              class="social-link whatsapp"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat on WhatsApp"
+            >
+              <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            </a>
+            <a
+              href="https://instagram.com/killstreak"
+              class="social-link instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow on Instagram"
+            >
+              <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+            </a>
+            <a
+              href="https://youtube.com/killstreak"
+              class="social-link youtube"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Subscribe on YouTube"
+            >
+              <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <!-- About Section -->
+        <section class="section">
+          <div class="section-header">
+            <div class="section-badge">
+              <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+              About Us
+            </div>
+            <h2>About Kill Streak</h2>
+            <p class="section-description">
+              <strong
+                >Welcome to Kill Streak – Your Ultimate Esports & Lottery
+                Platform!</strong
+              ><br /><br />
+              Kill Streak is your all-in-one destination for Free Fire
+              tournaments, lotteries, and real-money gaming. Whether you're a
+              casual player or a competitive pro, you can join matches, win
+              prizes, and withdraw your winnings—<strong
+                >all from your phone!</strong
+              >
+            </p>
+          </div>
+        </section>
+
+        <!-- Key Features -->
+        <section class="section" id="features">
+          <div class="section-header">
+            <div class="section-badge">
+              <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+              Features
+            </div>
+            <h2 class="section-title">Key Features</h2>
+            <p class="section-description">
+              Everything you need to dominate the gaming world, all in one
+              powerful platform.
+            </p>
+          </div>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+              </div>
+              <h3 class="feature-title">Join Matches Instantly</h3>
+              <p class="feature-description">
+                Play Solo, Duo, Squad, or special Tournament matches.<br />
+                See all upcoming, ongoing, and result matches in one place.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fa-solid fa-ticket" aria-hidden="true"></i>
+              </div>
+              <h3 class="feature-title">Lottery System</h3>
+              <p class="feature-description">
+                Buy tickets for live lotteries.<br />
+                Winners are picked randomly and prizes are credited instantly.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+              </div>
+              <h3 class="feature-title">Real Money Wallet</h3>
+              <p class="feature-description">
+                Add coins to your wallet using secure UPI payments.<br />
+                Use coins to join matches or buy lottery tickets.<br />
+                Withdraw your winnings directly to your UPI account.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+              </div>
+              <h3 class="feature-title">Live Leaderboards & Stats</h3>
+              <p class="feature-description">
+                Track your match history, kills, wins, and total earnings.<br />
+                See top players and your own progress.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fa-solid fa-key" aria-hidden="true"></i>
+              </div>
+              <h3 class="feature-title">Room ID & Password</h3>
+              <p class="feature-description">
+                Room details are revealed automatically before your match
+                starts—no need to wait for WhatsApp or Telegram!
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fa-solid fa-bell" aria-hidden="true"></i>
+              </div>
+              <h3 class="feature-title">Push Notifications</h3>
+              <p class="feature-description">
+                Get notified about match reminders, room passwords, results, and
+                winnings—even if the app is closed (if you allow notifications).
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="how-it-works">
+          <div class="container">
+            <div class="section-header">
+              <div class="section-badge">
+                <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                Process
+              </div>
+              <h2 class="section-title">How It Works</h2>
+              <p class="section-description">
+                Get started in just 5 simple steps and begin your journey to
+                victory.
+              </p>
+            </div>
+            <div class="steps-container">
+              <div class="step">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Register/Login</h3>
+                <p class="step-description">
+                  Create your account or log in securely.
+                </p>
+              </div>
+              <div class="step">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Add Coins</h3>
+                <p class="step-description">
+                  Use UPI to add coins to your wallet.
+                </p>
+              </div>
+              <div class="step">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Join Matches or Lotteries</h3>
+                <p class="step-description">
+                  Use your coins to join any available match or buy lottery
+                  tickets.
+                </p>
+              </div>
+              <div class="step">
+                <div class="step-number">4</div>
+                <h3 class="step-title">Play & Win</h3>
+                <p class="step-description">
+                  Compete in matches, win prizes, and see your results
+                  instantly.
+                </p>
+              </div>
+              <div class="step">
+                <div class="step-number">5</div>
+                <h3 class="step-title">Withdraw Winnings</h3>
+                <p class="step-description">
+                  Withdraw your winnings directly to your UPI account—fast and
+                  secure.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Why Choose -->
+        <section class="why-choose">
+          <div class="container">
+            <div class="section-header">
+              <div
+                class="section-badge"
+                style="
+                  background: rgba(255, 255, 255, 0.2);
+                  border-color: rgba(255, 255, 255, 0.3);
+                  color: #fff;
+                "
+              >
+                <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                Why Us
+              </div>
+              <h2 class="section-title">Why Choose Kill Streak?</h2>
+              <p
+                class="section-description"
+                style="color: rgba(255, 255, 255, 0.9)"
+              >
+                Join thousands of players who trust Kill Streak for fair,
+                secure, and rewarding gaming.
+              </p>
+            </div>
+            <div class="why-grid">
+              <div class="why-item">
+                <div class="why-icon">
+                  <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+                </div>
+                <h3 class="why-title">Fair Play</h3>
+                <p>Strict anti-cheat and transparent results.</p>
+              </div>
+              <div class="why-item">
+                <div class="why-icon">
+                  <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                </div>
+                <h3 class="why-title">Real Prizes</h3>
+                <p>Withdraw your winnings anytime.</p>
+              </div>
+              <div class="why-item">
+                <div class="why-icon">
+                  <i class="fa-solid fa-headset" aria-hidden="true"></i>
+                </div>
+                <h3 class="why-title">24/7 Support</h3>
+                <p>We're here to help you win!</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+          <div class="container">
+            <div class="cta-content">
+              <h2 class="cta-title">Ready to play?</h2>
+              <p class="cta-subtitle">
+                Compete. Conquer. Claim your glory with Kill Streak!
+              </p>
+              <a href="#features" class="cta-btn">
+                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                Start Playing Now
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // Toggle blurred header on scroll
+      const headerEl = document.querySelector(".header");
+      function onScrollHeader() {
+        headerEl.classList.toggle("is-scrolled", window.scrollY > 10);
+      }
+      window.addEventListener("scroll", onScrollHeader);
+      onScrollHeader();
+
+      // Match hero top padding to header height (prevents awkward gap)
+      const heroEl = document.querySelector(".hero");
+      function updateHeroPadding() {
+        const extra = 16; // little breathing room
+        heroEl.style.paddingTop = headerEl.offsetHeight + extra + "px";
+      }
+      window.addEventListener("resize", updateHeroPadding);
+      window.addEventListener("load", updateHeroPadding);
+      updateHeroPadding();
+
+      // Intersection Observer for animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add("animate-in");
+        });
+      }, observerOptions);
+
+      document
+        .querySelectorAll(".feature-card, .step, .why-item, .section-header")
+        .forEach((el) => observer.observe(el));
+
+      // Smooth scrolling for anchor links (ignore plain "#")
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          const href = this.getAttribute("href");
+          if (!href || href === "#") return;
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      // Motion preferences and pointer detection
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const pointerFine = window.matchMedia("(pointer: fine)").matches;
+
+      // Subtle mouse movement effect on hero (non-touch, wider screens)
+      if (
+        !reduceMotion &&
+        pointerFine &&
+        window.matchMedia("(min-width: 768px)").matches
+      ) {
+        const heroContent = document.querySelector(".hero-content");
+        const onMove = (e) => {
+          const { clientX, clientY } = e;
+          const { innerWidth, innerHeight } = window;
+          const x = (clientX / innerWidth - 0.5) * 2;
+          const y = (clientY / innerHeight - 0.5) * 2;
+          heroContent.style.transform = `translate(${x * 5}px, ${y * 5}px)`;
+        };
+        document.addEventListener("mousemove", onMove);
+      }
+    </script>
+  </body>
+</html>
